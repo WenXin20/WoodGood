@@ -183,6 +183,20 @@ public class StorageDrawersModule extends SimpleModule {
         this.addEntry(TRIMS);
     }
 
+    private void drawersPalette(Palette p) {
+        p.remove(p.getLightest());
+        p.increaseInner();
+        p.increaseInner();
+        p.increaseInner();
+        p.increaseUp();
+    }
+
+    private void trimPalette(Palette p) {
+        p.remove(p.getLightest());
+        p.increaseInner();
+        p.increaseUp();
+    }
+
     @Override
     public void onClientSetup() {
         super.onClientSetup();
@@ -203,20 +217,6 @@ public class StorageDrawersModule extends SimpleModule {
             System.arraycopy(base.slotGeometry, 0, b.slotGeometry, 0, base.slotGeometry.length);
             System.arraycopy(base.indGeometry, 0, b.indGeometry, 0, base.indGeometry.length);
         });
-    }
-
-    private void drawersPalette(Palette p) {
-        p.remove(p.getLightest());
-        p.increaseInner();
-        p.increaseInner();
-        p.increaseInner();
-        p.increaseUp();
-    }
-
-    private void trimPalette(Palette p) {
-        p.remove(p.getLightest());
-        p.increaseInner();
-        p.increaseUp();
     }
 
     @Override
