@@ -25,6 +25,10 @@
   "block_type.decorative_winter.snowy_palisade": "Snowy %s Palisade",
 
   "block_type.farmersdelight.cabinet": "%s Cabinet",
+
+  "block_type.infinitybuttons.large_button": "%s Large Button",
+  "block_type.infinitybuttons.plank_secret_button": "%s Plank Secret Button",
+
   "block_type.twilightforest.hollow_log": "Hollow %s Log",
   "block_type.twilightforest.hollow_log_vertical": "Hollow %s Log",
   "block_type.twilightforest.hollow_log_horizontal": "Hollow %s Log",

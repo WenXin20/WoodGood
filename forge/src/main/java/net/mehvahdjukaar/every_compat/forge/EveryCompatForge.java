@@ -8,6 +8,7 @@ import net.mehvahdjukaar.every_compat.modules.camp_chair.CampChairModule;
 import net.mehvahdjukaar.every_compat.modules.create.CreateModule;
 import net.mehvahdjukaar.every_compat.modules.decorative_blocks.DecorativeBlocksModule;
 import net.mehvahdjukaar.every_compat.modules.farmersdelight.FarmersDelightModule;
+import net.mehvahdjukaar.every_compat.modules.infinity_buttons.InfinityButtonsModule;
 import net.mehvahdjukaar.every_compat.modules.mcaw.*;
 import net.mehvahdjukaar.every_compat.modules.missing_wilds.MissingWildModule;
 import net.mehvahdjukaar.every_compat.modules.mrcrayfish_furniture.MrCrayfishFurnitureModule;
@@ -62,6 +63,7 @@ public class EveryCompatForge extends EveryCompat {
 
         addModule("campchair", () -> CampChairModule::new);
 
+        addModule("infinitybuttons", () -> InfinityButtonsModule::new);
         addModule("quark", () -> QuarkModule::new);
         addModule("farmersdelight", () -> FarmersDelightModule::new);
         addModule("decorative_blocks", () -> DecorativeBlocksModule::new);
