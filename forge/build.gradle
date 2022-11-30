@@ -122,6 +122,7 @@ dependencies {
     modImplementation("curse.maven:decorative-blocks-362528:3941638")
     modImplementation("curse.maven:domum-ornamentum-527361:4090940")
     modImplementation("curse.maven:farmersdelight-398521:3916069")
+    modImplementation("curse.maven:infinity-buttons-661902:4077031")
     modImplementation("curse.maven:jei-238222:3940099")
     modImplementation("curse.maven:macaws-bridges-351725:4018295")
     modImplementation("curse.maven:macaws-doors-378646:3930976")
