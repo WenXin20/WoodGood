@@ -8,6 +8,7 @@ import net.mehvahdjukaar.every_compat.modules.camp_chair.CampChairModule;
 import net.mehvahdjukaar.every_compat.modules.create.CreateModule;
 import net.mehvahdjukaar.every_compat.modules.decorative_blocks.DecorativeBlocksModule;
 import net.mehvahdjukaar.every_compat.modules.farmersdelight.FarmersDelightModule;
+import net.mehvahdjukaar.every_compat.modules.functional_storage.FunctionalStorageModule;
 import net.mehvahdjukaar.every_compat.modules.mcaw.*;
 import net.mehvahdjukaar.every_compat.modules.missing_wilds.MissingWildModule;
 import net.mehvahdjukaar.every_compat.modules.mrcrayfish_furniture.MrCrayfishFurnitureModule;
@@ -43,17 +44,12 @@ public class EveryCompatForge extends EveryCompat {
         addModule("mcwbridges", () -> MacawBridgesModule::new);
         addModule("mcwdoors", () -> MacawDoorsModule::new);
         addModule("mcwfences", () -> MacawFencesModule::new);
+        addModule("mcwfurnitures", () -> MacawFurnitureModule::new);
         addModule("mcwlights", () -> MacawLightsModule::new);
         addModule("mcwpaths", () -> MacawPathsModule::new);
         addModule("mcwroofs", () -> MacawRoofsModule::new);
         addModule("mcwtrpdoors", () -> MacawTrapdoorsModule::new);
         addModule("mcwwindows", () -> MacawWindowsModule::new);
-
-        addModule("mcwfences", () -> MacawFencesModule::new);
-        addModule("mcwfurnitures", () -> MacawFurnitureModule::new);
-        addModule("mcwbridges", () -> MacawBridgesModule::new);
-
-
 
         addModule("another_furniture", () -> AnotherFurnitureModule::new);
         addModule("backpacked", () -> BackpackedModule::new);
@@ -62,6 +58,7 @@ public class EveryCompatForge extends EveryCompat {
         addModule("create", () -> CreateModule::new);
         addModule("decorative_blocks", () -> DecorativeBlocksModule::new);
         addModule("farmersdelight", () -> FarmersDelightModule::new);
+        addModule("functionalstorage", () -> FunctionalStorageModule::new);
         addModule("missingwilds", () -> MissingWildModule::new);
         addModule("quark", () -> QuarkModule::new);
         addModule("storagedrawers", () -> StorageDrawersModule::new);

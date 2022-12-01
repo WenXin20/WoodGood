@@ -25,6 +25,9 @@
   "block_type.decorative_winter.snowy_palisade": "Snowy %s Palisade",
 
   "block_type.farmersdelight.cabinet": "%s Cabinet",
+
+  "block_type.functional_storage.1": "%s Drawer (1x1)",
+
   "block_type.twilightforest.hollow_log": "Hollow %s Log",
   "block_type.twilightforest.hollow_log_vertical": "Hollow %s Log",
   "block_type.twilightforest.hollow_log_horizontal": "Hollow %s Log",
