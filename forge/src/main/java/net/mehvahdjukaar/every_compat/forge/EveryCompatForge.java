@@ -16,6 +16,7 @@ import net.mehvahdjukaar.every_compat.modules.forge.dramaticdoors.DramaticDoorsM
 import net.mehvahdjukaar.every_compat.modules.forge.farmersdelight.FarmersDelightModule;
 import net.mehvahdjukaar.every_compat.modules.forge.infinitybuttons.InfinityButtonsModule;
 import net.mehvahdjukaar.every_compat.modules.forge.lauchs.LauchsShuttersModule;
+import net.mehvahdjukaar.every_compat.modules.forge.dawn_of_time.DawnOfTimeModule;
 import net.mehvahdjukaar.every_compat.modules.forge.mcaw.*;
 import net.mehvahdjukaar.every_compat.modules.forge.missing_wilds.MissingWildModule;
 import net.mehvahdjukaar.every_compat.modules.forge.mosaic_carpentry.MosaicCarpentryModule;
@@ -63,6 +64,7 @@ public class EveryCompatForge extends EveryCompat {
         addModule("buildersaddition", () -> BuildersAdditionModule::new);
         addModule("cfm", () -> MrCrayfishFurnitureModule::new);
         addModule("create", () -> CreateModule::new);
+        addModule("dawnoftimebuilder", () -> DawnOfTimeModule::new);
         addModule("dramaticdoors", () -> DramaticDoorsModule::new);
         if (PlatHelper.isModLoaded("mcwdoors")) {
             addModule("dramaticdoors", () -> DramaticDoorsMacawModule::new);
