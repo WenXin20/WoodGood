@@ -6,6 +6,7 @@ import net.mehvahdjukaar.every_compat.EveryCompat;
 import net.mehvahdjukaar.every_compat.EveryCompatClient;
 import net.mehvahdjukaar.every_compat.api.CompatModule;
 import net.mehvahdjukaar.every_compat.modules.fabric.architect_palette.ArchitectsPaletteModule;
+import net.mehvahdjukaar.every_compat.modules.fabric.crayfish.MightyMailModule;
 import net.mehvahdjukaar.every_compat.modules.fabric.create.CreateModule;
 import net.mehvahdjukaar.every_compat.modules.fabric.dramatic_doors.DramaticDoorsModule;
 import net.mehvahdjukaar.every_compat.modules.fabric.infinitybuttons.InfinityButtonsModule;
@@ -38,6 +39,7 @@ public class EveryCompatFabric extends EveryCompat implements ModInitializer {
         addModule("create", () -> CreateModule::new);
         addModule("infinitybuttons", () -> InfinityButtonsModule::new);
         addModule("dramaticdoors", () -> DramaticDoorsModule::new);
+        addModule("mighty_mail", () -> MightyMailModule::new);
         addModule("twilightforest", () -> TwilightForestModule::new);
 
         // ========================================== WORK IN PROGRESS ============================================== \\
