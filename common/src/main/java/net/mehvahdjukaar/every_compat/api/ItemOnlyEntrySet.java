@@ -51,11 +51,6 @@ public class ItemOnlyEntrySet<T extends BlockType, I extends Item> extends Abstr
         this.baseItem = baseItem;
     }
 
-    @Override
-    public boolean isDisabled() {
-        return this.getBaseItem() == null;
-    }
-
     public I getBaseItem() {
         return baseItem.get();
     }
@@ -84,9 +79,6 @@ public class ItemOnlyEntrySet<T extends BlockType, I extends Item> extends Abstr
 
     @Override
     public void registerItems(CompatModule module, Registrator<Item> registry) {
-        //if (isDisabled()) return;
-        //contrary to blocks other items could be null here
-
         BlockTypeRegistry<T> typeRegistry = BlockSetAPI.getTypeRegistry(this.type);
         for (T w : typeRegistry.getValues()) {
             String name = getItemName(w);
@@ -113,7 +105,7 @@ public class ItemOnlyEntrySet<T extends BlockType, I extends Item> extends Abstr
         Item base = getBaseItem();
         if (base == null || base == Items.AIR)
             //?? wtf im using disabled to allow for null??
-            throw new UnsupportedOperationException("Base block cant be null (" + this.typeName + " for " + module.modId + " module)");
+            throw new UnsupportedOperationException("Base Item cant be null (" + this.typeName + " for " + module.modId + " module)");
 
         String childKey = getChildKey(module);
         baseType.get().addChild(childKey,  base);
@@ -157,7 +149,6 @@ public class ItemOnlyEntrySet<T extends BlockType, I extends Item> extends Abstr
 
     @Override
     public void generateModels(CompatModule module, DynClientResourcesGenerator handler, ResourceManager manager) {
-        if (isDisabled()) return;
         ResourcesUtils.addItemModels(module.getModId(), manager, handler, items, baseType.get(), extraTransform);
     }
 

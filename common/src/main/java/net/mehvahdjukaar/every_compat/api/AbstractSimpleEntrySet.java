@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import net.mehvahdjukaar.every_compat.EveryCompat;
 import net.mehvahdjukaar.every_compat.configs.ModConfigs;
 import net.mehvahdjukaar.every_compat.misc.ResourcesUtils;
+import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.mehvahdjukaar.moonlight.api.resources.BlockTypeResTransformer;
 import net.mehvahdjukaar.moonlight.api.resources.RPUtils;
 import net.mehvahdjukaar.moonlight.api.resources.SimpleTagBuilder;
@@ -114,8 +115,6 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
         return null;
     }
 
-    public abstract boolean isDisabled();
-
     public Class<T> getTypeClass() {
         return type;
     }
@@ -147,7 +146,6 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
 
     @Override
     public void generateTags(CompatModule module, DynamicDataPack pack, ResourceManager manager) {
-        if (isDisabled()) return;
         if (!tags.isEmpty()) {
             for (var tb : tags.entrySet()) {
                 SimpleTagBuilder builder = SimpleTagBuilder.of(tb.getKey());
@@ -163,13 +161,12 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
         }
     }
 
-    public Map<T, ?> getDefaultEntries(){
+    public Map<T, ?> getDefaultEntries() {
         return blocks;
     }
 
     @Override
     public void generateRecipes(CompatModule module, DynamicDataPack pack, ResourceManager manager) {
-        if (isDisabled()) return;
         int i = 0;
         for (var r : this.recipeLocations) {
             var res = r.get();
@@ -184,13 +181,12 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
     // i have no fucking clue whats going on here
     @Override
     public void generateTextures(CompatModule module, DynClientResourcesGenerator handler, ResourceManager manager) {
-        if (isDisabled()) return;
         if (textures.isEmpty()) return;
 
         List<TextureImage> images = new ArrayList<>();
         try (TextureImage oakPlanksTexture = TextureImage.open(manager,
-                RPUtils.findFirstBlockTextureLocation(manager,(Block) this.getBaseType().mainChild()))){
-            Palette oakPlanksPalette  = Palette.fromImage(oakPlanksTexture);
+                RPUtils.findFirstBlockTextureLocation(manager, (Block) this.getBaseType().mainChild()))) {
+            Palette oakPlanksPalette = Palette.fromImage(oakPlanksTexture);
 
             Map<ResourceLocation, Respriter> respriters = new HashMap<>();
             Map<ResourceLocation, TextureImage> partialRespriters = new HashMap<>();
@@ -212,40 +208,41 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
 
                         if (maskId != null) {
                             TextureImage mask;
-                            if(maskId.equals(AUTO_MASK_MARKER)) {
-                                if(mergePalette){
+                            if (maskId.equals(AUTO_MASK_MARKER)) {
+                                if (mergePalette) {
                                     globalPalette.addAll(oakPlanksPalette);
                                     partialRespriters.put(textureId, main);
-                                }else {
+                                } else {
                                     respriters.put(textureId, Respriter.ofPalette(main, oakPlanksPalette));
                                 }
-                            }else {
+                            } else {
                                 mask = TextureImage.open(manager, maskId);
-                                if(mergePalette){
+                                if (mergePalette) {
                                     globalPalette.addAll(Palette.fromImage(main, mask, 0));
                                     partialRespriters.put(textureId, main);
-                                }else {
+                                } else {
                                     respriters.put(textureId, Respriter.masked(main, mask));
                                 }
                             }
 
                         } else {
-                            if(mergePalette){
-                                globalPalette.addAll(Palette.fromImage(main,null, 0));
+                            if (mergePalette) {
+                                globalPalette.addAll(Palette.fromImage(main, null, 0));
                                 partialRespriters.put(textureId, main);
-                            }else {
+                            } else {
                                 respriters.put(textureId, Respriter.of(main));
                             }
                         }
                     }
                 } catch (UnsupportedOperationException e) {
-                    EveryCompat.LOGGER.error("Could not generate textures for {}: {}", p, e);
+                    EveryCompat.LOGGER.error("Could not generate textures for {}", p, e);
                 } catch (Exception e) {
-                    EveryCompat.LOGGER.error("Failed to read block texture at {}", p);
+                    if (PlatHelper.isDev()) throw new RuntimeException(e);
+                    EveryCompat.LOGGER.error("Failed to read block texture at {}", p, e);
                 }
             }
 
-            for(var e : partialRespriters.entrySet()){
+            for (var e : partialRespriters.entrySet()) {
                 respriters.put(e.getKey(), Respriter.ofPalette(e.getValue(), globalPalette));
             }
 
@@ -299,13 +296,14 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
                     String newId = BlockTypeResTransformer.replaceTypeNoNamespace(oldPath, w, blockId, baseType.get().getTypeName());
 
                     Respriter respriter = re.getValue();
+                    boolean isOnAtlas = !newId.startsWith("entity/");
                     if (type == WoodType.class) {
                         addWoodTexture((WoodType) w, handler, manager, newId, () ->
-                                respriter.recolorWithAnimation(finalTargetPalette, finalAnimation));
+                                respriter.recolorWithAnimation(finalTargetPalette, finalAnimation), isOnAtlas);
 
                     } else {
                         handler.addTextureIfNotPresent(manager, newId, () ->
-                                respriter.recolorWithAnimation(finalTargetPalette, finalAnimation));
+                                respriter.recolorWithAnimation(finalTargetPalette, finalAnimation), isOnAtlas);
                     }
                 }
             }
@@ -324,12 +322,12 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
 
     //post process some textures. currently only ecologics azalea
     public void addWoodTexture(WoodType wood, DynClientResourcesGenerator handler, ResourceManager manager,
-                                      String path, Supplier<TextureImage> textureSupplier) {
+                               String path, Supplier<TextureImage> textureSupplier, boolean isOnAtlas) {
         handler.addTextureIfNotPresent(manager, path, () -> {
             var t = textureSupplier.get();
             maybeFlowerAzalea(t, manager, wood);
             return t;
-        });
+        }, isOnAtlas);
     }
 
     //for ecologics
@@ -408,7 +406,7 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
         }
 
         public BL setTab(Supplier<CreativeModeTab> tab) {
-            this.tab = Suppliers.memoize(()-> BuiltInRegistries.CREATIVE_MODE_TAB.getResourceKey(tab.get()).get());
+            this.tab = Suppliers.memoize(() -> BuiltInRegistries.CREATIVE_MODE_TAB.getResourceKey(tab.get()).get());
             return (BL) this;
         }
 
@@ -453,9 +451,9 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
         }
 
 
-        public BL useMergedPalette(){
+        public BL useMergedPalette() {
             this.useMergedPalette = true;
-            return (BL)this;
+            return (BL) this;
         }
 
         //by default, they all use planks palette
@@ -471,15 +469,29 @@ public abstract class AbstractSimpleEntrySet<T extends BlockType, B extends Bloc
 
         public BL createPaletteFromChild(Consumer<Palette> paletteTransform, String childKey) {
             return this.setPalette((w, m) -> {
-                try (TextureImage plankTexture = TextureImage.open(m,
-                        RPUtils.findFirstBlockTextureLocation(m, w.getBlockOfThis(childKey)))) {
+                var c = w.getChild(childKey);
+                if (c instanceof Block b) {
+                    try (TextureImage plankTexture = TextureImage.open(m,
+                            RPUtils.findFirstBlockTextureLocation(m, b))) {
 
-                    List<Palette> targetPalette = Palette.fromAnimatedImage(plankTexture);
-                    targetPalette.forEach(paletteTransform);
-                    return Pair.of(targetPalette, plankTexture.getMetadata());
-                } catch (Exception e) {
-                    throw new RuntimeException(String.format("Failed to generate palette for %s : %s", w, e));
+                        List<Palette> targetPalette = Palette.fromAnimatedImage(plankTexture);
+                        targetPalette.forEach(paletteTransform);
+                        return Pair.of(targetPalette, plankTexture.getMetadata());
+                    } catch (Exception e) {
+                        throw new RuntimeException(String.format("Failed to generate palette for %s : %s", w, e));
+                    }
+                } else if (c instanceof Item i) {
+                    try (TextureImage plankTexture = TextureImage.open(m,
+                            RPUtils.findFirstItemTextureLocation(m, i))) {
+
+                        List<Palette> targetPalette = Palette.fromAnimatedImage(plankTexture);
+                        targetPalette.forEach(paletteTransform);
+                        return Pair.of(targetPalette, plankTexture.getMetadata());
+                    } catch (Exception e) {
+                        throw new RuntimeException(String.format("Failed to generate palette for %s : %s", w, e));
+                    }
                 }
+                throw new RuntimeException("No child with key " + childKey + "found");
             });
         }
     }

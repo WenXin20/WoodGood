@@ -36,10 +36,13 @@ public class SimpleModule extends CompatModule {
         return bloat;
     }
 
-    public void addEntry(EntrySet<?> entryHolder) {
-        this.entries.put(entryHolder.getName(), entryHolder);
-
+    public <T extends BlockType> EntrySet<T> addEntry(EntrySet<T> entryHolder) {
+        var old = this.entries.put(entryHolder.getName(), entryHolder);
+        if (old != null) {
+            throw new UnsupportedOperationException(String.format("This module already has an entry set with name %s", entryHolder.getName()));
+        }
         EveryCompat.addEntryType(entryHolder.getTypeClass(), entryHolder.getChildKey(this));
+        return entryHolder;
     }
 
     public Collection<EntrySet<?>> getEntries() {
@@ -134,8 +137,8 @@ public class SimpleModule extends CompatModule {
         List<Item> l = new ArrayList<>();
         for (EntrySet<?> entrySet : entries.values()) {
             if (entrySet.getTypeClass().isAssignableFrom(type.getClass())) {
-                Item itemOfType = ( (EntrySet<T>) entrySet).getItemOf(type);
-                if(itemOfType != null) l.add(itemOfType);
+                Item itemOfType = ((EntrySet<T>) entrySet).getItemOf(type);
+                if (itemOfType != null) l.add(itemOfType);
             }
         }
         return l;

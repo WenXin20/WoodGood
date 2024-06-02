@@ -5,6 +5,8 @@ import net.mehvahdjukaar.every_compat.EveryCompat;
 import net.mehvahdjukaar.every_compat.EveryCompatClient;
 import net.mehvahdjukaar.every_compat.api.CompatModule;
 import net.mehvahdjukaar.every_compat.configs.ModConfigs;
+import net.mehvahdjukaar.every_compat.modules.forge.abnormal.BoatLoadModule;
+import net.mehvahdjukaar.every_compat.modules.forge.abnormal.WoodworksModule;
 import net.mehvahdjukaar.every_compat.modules.forge.architect_palette.ArchitectsPaletteModule;
 import net.mehvahdjukaar.every_compat.modules.forge.backpacked.BackpackedModule;
 import net.mehvahdjukaar.every_compat.modules.forge.builders_delight.BuildersDelightModule;
@@ -18,16 +20,19 @@ import net.mehvahdjukaar.every_compat.modules.forge.lauchs.LauchsShuttersModule;
 import net.mehvahdjukaar.every_compat.modules.forge.dawn_of_time.DawnOfTimeModule;
 import net.mehvahdjukaar.every_compat.modules.forge.mcaw.*;
 import net.mehvahdjukaar.every_compat.modules.forge.missing_wilds.MissingWildModule;
-import net.mehvahdjukaar.every_compat.modules.forge.more_crafting_tables.MoreCraftingTablesModule;
+import net.mehvahdjukaar.every_compat.modules.forge.more.MoreChestVariantsModule;
+import net.mehvahdjukaar.every_compat.modules.forge.more.MoreCraftingTablesModule;
 import net.mehvahdjukaar.every_compat.modules.forge.mosaic_carpentry.MosaicCarpentryModule;
 import net.mehvahdjukaar.every_compat.modules.forge.mrcrayfish_furniture.MightyMailModule;
 import net.mehvahdjukaar.every_compat.modules.forge.mrcrayfish_furniture.MrCrayfishFurnitureModule;
 import net.mehvahdjukaar.every_compat.modules.forge.pokecube.PokecubeLegendsModule;
 import net.mehvahdjukaar.every_compat.modules.forge.premium_wood.PremiumWoodModule;
+import net.mehvahdjukaar.every_compat.modules.forge.regions_unexplored.RegionsUnexploredModule;
 import net.mehvahdjukaar.every_compat.modules.forge.storagedrawers.StorageDrawersModule;
 import net.mehvahdjukaar.every_compat.modules.forge.twilightforest.TwilightForestModule;
 import net.mehvahdjukaar.every_compat.modules.forge.valhelsia.ValhelsiaStructuresModule;
-import net.mehvahdjukaar.every_compat.modules.forge.variant_crafting_tables.VariantCraftingTablesModule;
+import net.mehvahdjukaar.every_compat.modules.forge.variants.VariantCraftingTablesModule;
+import net.mehvahdjukaar.every_compat.modules.forge.variants.VariantVanillaBlocksModule;
 import net.mehvahdjukaar.every_compat.modules.forge.woodster.WoodsterModule;
 import net.mehvahdjukaar.every_compat.modules.forge.workshop.WorkshopForHandsomeAdventurerModule;
 import net.mehvahdjukaar.every_compat.modules.forge.xerca.XercaModule;
@@ -64,6 +69,7 @@ public class EveryCompatForge extends EveryCompat {
         // ========================================= Add Modules ==================================================== \\
         addModule("architects_palette", () -> ArchitectsPaletteModule::new);
         addModule("backpacked", () -> BackpackedModule::new);
+        addModule("boatload", () -> BoatLoadModule::new);
         addModule("buildersdelight", () -> BuildersDelightModule::new);
         addModule("buildersaddition", () -> BuildersAdditionModule::new);
         addModule("cfm", () -> MrCrayfishFurnitureModule::new);
@@ -87,8 +93,10 @@ public class EveryCompatForge extends EveryCompat {
         addModule("valhelsia_structures", () -> ValhelsiaStructuresModule::new);
         addModule("woodster", () -> WoodsterModule::new);
         addModule("vct", () -> VariantCraftingTablesModule::new);
+        addModule("woodworks", () -> WoodworksModule::new);
         addModule("workshop_for_handsome_adventurer", () -> WorkshopForHandsomeAdventurerModule::new);
         addModule("xercamod", () -> XercaModule::new);
+        addModule("regions_unexplored", () -> RegionsUnexploredModule::new);
 
         // ========================================= Macaw's ======================================================== \\
         addModule("mcwbridges", () -> MacawBridgesModule::new);
@@ -104,6 +112,8 @@ public class EveryCompatForge extends EveryCompat {
 
         // ========================================== WORK IN PROGRESS ============================================== \\
 //        addModule("productivebees", () -> ProductiveBeesModule::new); // class for both beehive have major changes
+        addModule("variantvanillablocks", () -> VariantVanillaBlocksModule::new);
+        addModule("lolmcv", () -> MoreChestVariantsModule::new);
 
         // ====================================== DISABLED FOR A REASON ============================================= \\
 //        addModule("graveyard", () -> GraveyardModule::new); // Disabled until custom block models work

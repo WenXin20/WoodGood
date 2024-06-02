@@ -54,5 +54,24 @@ versionRange="[1.20-2.8.0,]"
 ordering="NONE"
 side="BOTH"
 
+# ----------------------------------------------------- MODS -----------------------------------------------------------
+
+[[dependencies.everycomp]] #optional
+
+modId="mcwbridges"
+mandatory=false
+versionRange="[3.0.0,)" #mandatory
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.everycomp]] #optional
+
+modId="mcwfences"
+mandatory=false
+versionRange="[1.1.1,)" #mandatory
+ordering="AFTER"
+side="BOTH"
+
+
 
 

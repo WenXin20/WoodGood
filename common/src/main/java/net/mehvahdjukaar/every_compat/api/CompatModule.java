@@ -22,7 +22,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -140,29 +139,11 @@ public abstract class CompatModule {
         if (woodType.getId().toString().equals("ecologics:walnut")) {
             return name.equals("vct:walnut_crafting_table");
         }
-        if (woodType.getId().toString().equals("regions_unexplored:aspen")) {
-            return name.equals("vct:aspen_crafting_table");
-        }
-        if (woodType.getId().toString().equals("regions_unexplored:cherry")) {
-            return name.equals("vct:cherry_crafting_table");
-        }
-        if (woodType.getId().toString().equals("regions_unexplored:fir")) {
-            return name.equals("vct:fir_crafting_table");
-        }
-        if (woodType.getId().toString().equals("regions_unexplored:jacaranda")) {
-            return name.equals("vct:jacaranda_crafting_table");
-        }
-        if (woodType.getId().toString().equals("regions_unexplored:maple")) {
-            return name.equals("vct:maple_crafting_table");
-        }
-        if (woodType.getId().toString().equals("regions_unexplored:willow")) {
-            return name.equals("vct:willow_crafting_table");
-        }
 
         if (registry.containsKey(new ResourceLocation(modId, name)) || //ones from the mod they are from. usually include vanilla types
                 registry.containsKey(new ResourceLocation(modId, n2))) return true;
         if (this.shortenedId().equals("af")) return false; //hardcoding
-        if (this.shortenedId().equals("ap")) return false; //hardcoding
+        // if (this.shortenedId().equals("ap")) return false; //hardcoding dont remember why i had this. Incase you want o
         if (this.shortenedId().equals("vs")) return false; //we always register everything for these
         if (this.shortenedId().equals("abww") && woodFrom.equals("architects_palette"))
             return false; //we always register everything for these
@@ -172,7 +153,7 @@ public abstract class CompatModule {
         for (var c : EveryCompat.COMPAT_MODS) {
             String compatModId = c.modId();  //bopcomp : bop->quark, twigs
             //if the wood is from the mod this adds compat for && it supports this block type
-            if (woodFrom.equals(c.woodFrom()) && c.blocksFrom().contains(modId)) {
+            if (c.woodsFrom().contains(woodFrom) && c.blocksFrom().contains(modId)) {
                 if (registry.containsKey(new ResourceLocation(compatModId, name))) return true;
                 if (registry.containsKey(new ResourceLocation(compatModId, n1))) return true;
                 if (registry.containsKey(new ResourceLocation(compatModId, n2))) return true;

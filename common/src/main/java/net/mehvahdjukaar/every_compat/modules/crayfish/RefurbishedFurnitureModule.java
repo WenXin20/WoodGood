@@ -13,7 +13,9 @@ import net.mehvahdjukaar.every_compat.EveryCompat;
 import net.mehvahdjukaar.every_compat.api.SimpleEntrySet;
 import net.mehvahdjukaar.every_compat.api.SimpleModule;
 import net.mehvahdjukaar.every_compat.dynamicpack.ClientDynamicResourcesHandler;
+import net.mehvahdjukaar.every_compat.dynamicpack.ServerDynamicResourcesHandler;
 import net.mehvahdjukaar.every_compat.misc.ResourcesUtils;
+import net.mehvahdjukaar.every_compat.misc.SpriteHelper;
 import net.mehvahdjukaar.moonlight.api.platform.ClientHelper;
 import net.mehvahdjukaar.moonlight.api.resources.ResType;
 import net.mehvahdjukaar.moonlight.api.resources.StaticResource;
@@ -48,6 +50,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +59,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-//SUPPORT: v?.?.?
+//SUPPORT: v1.0.0-beta-4
 public class RefurbishedFurnitureModule extends SimpleModule {
 
     public final SimpleEntrySet<WoodType, Block> chairs;
@@ -182,7 +186,7 @@ public class RefurbishedFurnitureModule extends SimpleModule {
 
         toilets = SimpleEntrySet.builder(WoodType.class, "toilet",
                         getModBlock("oak_toilet"), () -> WoodTypeRegistry.OAK_TYPE,
-                        w -> new ToiletBlock(BlockBehaviour.Properties.of().mapColor(w.planks.defaultMapColor())
+                        w -> new WoodenToiletBlock(w.toVanillaOrOak(), BlockBehaviour.Properties.of().mapColor(w.planks.defaultMapColor())
                                 .strength(3.5f).sound(SoundType.STONE)))
                 .addRecipe(modRes("constructing/oak_toilet"))
                 .setTab(ModCreativeTabs.MAIN::get)
@@ -427,6 +431,8 @@ public class RefurbishedFurnitureModule extends SimpleModule {
                                 .sound(SoundType.AZALEA_LEAVES))
                 )
                 .requiresChildren("leaves")
+                .addModelTransform(m -> m.replaceWithTextureFromChild("minecraft:block/oak_leaves",
+                        "leaves", SpriteHelper.LOOKS_LIKE_LEAF_TEXTURE))
                 .addRecipe(modRes("constructing/oak_hedge"))
                 .setTab(ModCreativeTabs.MAIN::get)
                 .addTile(ModBlockEntities.DRAWER::get)
@@ -492,13 +498,11 @@ public class RefurbishedFurnitureModule extends SimpleModule {
         super.onClientSetup();
         darkFans.blocks.forEach((key, value) -> {
             ResourceLocation res = EveryCompat.res("extra/" + key.getAppendableId() + "_dark_ceiling_fan_blade");
-            ModelManager manager = Minecraft.getInstance().getModelManager();
-            CeilingFanBlockEntityRenderer.registerFanBlade(value, () -> ClientHelper.getModel(manager, res));
+            CeilingFanBlockEntityRenderer.registerFanBlade(value, () -> ClientHelper.getModel(Minecraft.getInstance().getModelManager(), res));
         });
         lightFans.blocks.forEach((key, value) -> {
-            ModelManager manager = Minecraft.getInstance().getModelManager();
             ResourceLocation res = EveryCompat.res("extra/" + key.getAppendableId() + "_light_ceiling_fan_blade");
-            CeilingFanBlockEntityRenderer.registerFanBlade(value, () -> ClientHelper.getModel(manager, res));
+            CeilingFanBlockEntityRenderer.registerFanBlade(value, () -> ClientHelper.getModel(Minecraft.getInstance().getModelManager(), res));
         });
     }
 
@@ -525,7 +529,7 @@ public class RefurbishedFurnitureModule extends SimpleModule {
             this.materials = NonNullList.withSize(materialArray.size(), StackedIngredient.EMPTY);
             IntStream.range(0, materialArray.size()).forEach((i) -> materials.set(i, StackedIngredient.fromJson(materialArray.get(i))));
             String s1 = GsonHelper.getAsString(json, "result");
-            int i = GsonHelper.getAsInt(json, "count");
+            int i = GsonHelper.getAsInt(json, "count", 1);
             this.result = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(s1)), i);
             this.notification = GsonHelper.getAsBoolean(json, "show_notification", true);
         }
